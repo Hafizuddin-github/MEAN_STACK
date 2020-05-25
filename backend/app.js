@@ -37,10 +37,13 @@ app.post('/api/posts',(req, res, next) => {
     title: req.body.title,
     content: req.body.content
   });
-  post.save();
-  res.status(201).json({
-    message: 'Post added sucessfully!'
-  });
+  post.save()
+    .then(createdPost => {
+      res.status(201).json({
+        message: 'Post added sucessfully!',
+        postId: createdPost._id
+      });
+    });
 })
 
 app.get('/api/posts',(req, res, next) =>{
@@ -62,6 +65,8 @@ app.delete('/api/posts/:id', (req, res, next) => {
       res.status(200).json({
         message: 'Deleted id!'
       });
+    }).catch(err => {
+      console.log(err)
     });
 });
 
